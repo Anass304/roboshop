@@ -15,7 +15,26 @@ if [ $1? -eq 0 ]; then
     fi
     }
 
+systemd_setup(){
+  print_head "copy SystemD service File"
+  cp ${code_dir}/configs/${component}.services /etc/systemd/system/${component}.services &>>{log_file}
+  status_check $?
 
+  sed -i -e "s/ROBOSHOP_USER_PASSWORD/${roboshop_app_password}/" /etc/systemd/system/${component}.services &>>{log_file}
+
+  print_head " Reload SystemD"
+  systemctl daemon-reload &>>${log_file}
+    status_check $?
+
+    print_head " enable SystemD"
+  systemctl enable ${component} &>>{log_file
+    status_check $?
+
+    print_head "Restart SystemD"
+  systemctl restart ${component} &>>{log_file}
+  status_check $?
+
+}
     schema_setup(){
       if [ "${schema_type}"=="mongo"]; then
 
@@ -67,8 +86,8 @@ if [ $1? -eq 0 ]; then
              status_check $?
                   cd /app
 
-
     }
+    fi
     nodejs(){
 
       print_head "configure NodeJS Repo"
@@ -100,27 +119,50 @@ if [ $1? -eq 0 ]; then
       print_head "Start ${component}Services"
       systemctl restart ${component}
       status_check $?
-
+#schema setup function
     schema_setup
 
+#systemD Function
+systemd_setup
 }
 
+
 java(){
-  print_head "Install Maven"
-  yum install maven -y
-status_check $?
+  print_head " Install Maven "
+  yum install maven -y &>>${log_file}
+  status_check $?
 
-app_prereq_setup
+  app_prereq_setup
+    print_head " Download dependencies & package "
+    mvn clean package &>>${log_file}
+    mv target/${component}-1.0.jar ${component}.jar &>>${log_file}
+      status_check $?
 
-print_head "Download Dependencies & package"
-mvn clean package &>>{log_file}
-mv target/${component}-1.0.jar ${component}.jar &>>{log_file}
-status_check $?
-
-
-systemctl daemon-reload
-systemctl enable shipping
-systemctl start shipping
-
+#schema setup function
 schema_setup
+#systemd function
+systemd_setup
+
+
+}
+python(){
+
+    print_head "Install python "
+    yum install python36 gcc python3-devel -y &>>{log_file}
+  status_check $?
+
+  app_prereq_setup
+
+  print_head "install python Dependencies & package"
+
+  pip3.6 install -r requirements.txt&>>{log_file}
+  status_check $?
+
+
+  systemctl daemon-reload
+  systemctl enable shipping
+  systemctl start shipping
+
+#systemD function
+systemd_setup
 }
