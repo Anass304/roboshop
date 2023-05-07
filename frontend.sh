@@ -1,40 +1,41 @@
 source common.sh
 
-"Installing nginx"
-yum install nginx -y
-echo $?
+Print_head "Installing nginx"
+yum install nginx -y &>>${log_file}
+
+status_check $?
 
 print_head "Removing old content"
 rm -rf /usr/share/nginx/html/*
-echo $?
+status_check $?
 
 
 print_head "Downloading frontend content"
 curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend.zip &>>{log_file}
-echo $?
+status_check $?
 
 
 print_head "Extracting Downloaded frontend content"
 cd /usr/share/nginx/html
-echo $?
+status_check $?
 
 
 unzip /tmp/frontend.zip &>>{log_file}
-echo $?
+status_check $?
 
 
 print_head "Copying nginx config for Roboshop"
 cp ${code_dir}/configs/nginx-roboshop.conf /etc/nginx/default.d/roboshop.conf &>>{log_file}
 
-echo $?
+status_check $?
 
 print_head "Enabling nginx"
 systemctl enable nginx
-echo $?
+status_check $?
 
 print_head "Restart nginx"
 systemctl restart nginx
-echo $?
+status_check $?
 
 # Roboshop config is not copied
 # if any cmd is erored or failed , we need to stop the script
