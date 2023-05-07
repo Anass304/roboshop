@@ -1,4 +1,4 @@
 source common.sh
-
 component=cart
-NodeJS
+schema_type=""
+nodejs

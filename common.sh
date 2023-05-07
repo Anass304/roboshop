@@ -14,8 +14,23 @@ if [ $1? -eq 0 ]; then
     exit 1
     fi
     }
-    
-    NODEJS(){
+
+
+    schema_setup(){
+      if [ "${schema_type}"=="mongo"]; then
+
+        print_head "Copy MongoDB Repo File"
+            cp ${code_dir}/configs/mongodb.repo /etc/yum.repos.d/mongodb.repo &>>{log_file}
+            status_check $?
+            print_head "Install Mongo Client "
+            yum install mongodb-org-shell -y &>>{log_file}
+            status_check $?
+            print_head "Load Schema "
+            mongo --host mongodb.anassdevops.online </app/schema/${component}.js &>>{log_file}
+            status_check $?
+ fi
+    }
+    nodejs(){
 
       print_head "configure NodeJS Repo"
       curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>${log_file}
@@ -71,15 +86,7 @@ if [ $1? -eq 0 ]; then
       print_head "Start ${component}Services"
       systemctl restart ${component}
       status_check $?
-      print_head "Copy MongoDB Repo File"
-      cp ${code_dir}/configs/mongodb.repo /etc/yum.repos.d/mongodb.repo &>>{log_file}
-      status_check $?
-      print_head "Install Mongo Client "
-      yum install mongodb-org-shell -y &>>{log_file}
-      status_check $?
-      print_head "Load Schema "
-      mongo --host mongodb.anassdevops.online </app/schema/${component}.js &>>{log_file}
-      status_check $?
 
+    schema_setup
 
 }
