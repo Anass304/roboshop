@@ -9,7 +9,7 @@ if [ -z "${roboshop_app_password}" ]; then
 status_check $?
 
 print_head "Setup Erlang repo"
-curl -s https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh | bash &>>{log_file}
+curl -s https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh | bash  &>>{log_file}
 
 status_check $?
 
@@ -19,7 +19,7 @@ status_check $?
 
 
 print_head "setup Rabbitmq repo "
-curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh | bash &>>{log_file}
+curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh | bash  &>>{log_file}
 print_head "Install Erlang & RabbitMq"
 yum install rabbitmq-server -y &>>{log_file}
 status_check $?
