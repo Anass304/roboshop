@@ -69,7 +69,7 @@ if [ $1? -eq 0 ]; then
 
       status_check $?
       print_head "Start ${component}Services"
-      systemctl restart ${component
+      systemctl restart ${component}
       status_check $?
       print_head "Copy MongoDB Repo File"
       cp ${code_dir}/configs/mongodb.repo /etc/yum.repos.d/mongodb.repo &>>{log_file}
