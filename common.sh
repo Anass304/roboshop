@@ -45,7 +45,7 @@ systemd_setup(){
             yum install mongodb-org-shell -y &>>{log_file}
             status_check $?
             print_head "Load Schema "
-            mongo --host mongodb.anassdevops.online </app/schema/${component}.js &>>{log_file}
+            mongo --host mongodb-dev.anassdevops.online </app/schema/${component}.js &>>{log_file}
             status_check $?
             elif [ "${schema_type}" == "mysql" ]; then
               print_head "Install Mysql Client "
@@ -53,7 +53,7 @@ systemd_setup(){
               status_check $?
 
               print_head "load schema"
-              mysql -h mysql.anassdevops.online -uroot -p${mysql_root_pasword}< /app/schema/shipping.sql
+              mysql -h mysql-dev.anassdevops.online -uroot -p${mysql_root_pasword}< /app/schema/shipping.sql
               status_check $?
 
  fi
