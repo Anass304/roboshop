@@ -16,8 +16,8 @@ status_check(){
 
 systemd_setup(){
   print_head "copy SystemD service File"
-  cp ${code_dir}/configs/${component}.services /etc/systemd/system/${component}.services &>>{log_file}
-  status_check $?
+  cp ${code_dir}/configs/${component}.service /etc/systemd/system/${component}.service &>>${log_file}
+    status_check $?
 
   sed -i -e "s/ROBOSHOP_USER_PASSWORD/${roboshop_app_password}/" /etc/systemd/system/${component}.services &>>{log_file}
 
