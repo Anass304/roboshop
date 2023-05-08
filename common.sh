@@ -33,29 +33,30 @@ systemd_setup() {
    systemctl restart ${component} &>>${log_file}
    status_check $?
  }
-    schema_setup(){
-      if [ "${schema_type}"=="mongo"]; then
 
-        print_head "Copy MongoDB Repo File"
-            cp ${code_dir}/configs/mongodb.repo /etc/yum.repos.d/mongodb.repo &>>{log_file}
-            status_check $?
-            print_head "Install Mongo Client "
-            yum install mongodb-org-shell -y &>>{log_file}
-            status_check $?
-            print_head "Load Schema "
-            mongo --host mongodb-dev.anassdevops.online </app/schema/${component}.js &>>{log_file}
-            status_check $?
-            elif [ "${schema_type}" == "mysql" ]; then
-              print_head "Install Mysql Client "
-              yum install mysql -y
-              status_check $?
+schema_setup() {
+  if [ "${schema_type}" == "mongo" ]; then
+    print_head "Copy MongoDB Repo File"
+    cp ${code_dir}/configs/mongodb.repo /etc/yum.repos.d/mongodb.repo &>>${log_file}
+    status_check $?
 
-              print_head "load schema"
-              mysql -h mysql-dev.anassdevops.online -uroot -p${mysql_root_pasword}< /app/schema/shipping.sql
-              status_check $?
+    print_head "Install Mongo Client"
+    yum install mongodb-org-shell -y &>>${log_file}
+    status_check $?
 
- fi
-    }
+    print_head "Load Schema"
+    mongo --host mongodb-dev.devopsb71.online </app/schema/${component}.js &>>${log_file}
+    status_check $?
+  elif [ "${schema_type}" == "mysql" ]; then
+    print_head "Install MySQL Client"
+    yum install mysql -y &>>${log_file}
+    status_check $?
+
+    print_head "Load Schema"
+    mysql -h mysql-dev.devopsb71.online -uroot -p${mysql_root_password} < /app/schema/shipping.sql &>>${log_file}
+    status_check $?
+  fi
+}
     app_prereq_setup(){
         print_head "Create Roboshop ${component}"
             id roboshop &>>{log_ile}
