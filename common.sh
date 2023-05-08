@@ -76,7 +76,7 @@ systemd_setup(){
             status_check $?
 
             print_head "Downloading App content"
-            curl -o /tmp/${component}.zip https://roboshop-artifacts.s3.amazonaws.com/${component}.zip &>>{log_file}
+            curl -l -o /tmp/${component}.zip https://roboshop-artifacts.s3.amazonaws.com/${component}.zip &>>{log_file}
             status_check $?
             cd /app
 
