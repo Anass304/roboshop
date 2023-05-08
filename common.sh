@@ -85,9 +85,10 @@ systemd_setup(){
             unzip /tmp/${component}.zip &>>{log_file}
              status_check $?
                   cd /app
+                  fi
 
     }
-    fi
+
     nodejs(){
 
       print_head "configure NodeJS Repo"
@@ -113,7 +114,7 @@ systemd_setup(){
 
       status_check $?
       print_head "Enabling ${component}service"
-      systemctl enable usser
+      systemctl enable user
 
       status_check $?
       print_head "Start ${component}Services"
