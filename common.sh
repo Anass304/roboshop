@@ -14,26 +14,25 @@ status_check(){
     fi
     }
 
-systemd_setup(){
-  print_head "copy SystemD service File"
-  cp ${code_dir}/configs/${component}.service /etc/systemd/system/${component}.service &>>${log_file}
-    status_check $?
+systemd_setup() {
+   print_head "Copy SystemD Service File"
+   cp ${code_dir}/configs/${component}.service /etc/systemd/system/${component}.service &>>${log_file}
+   status_check $?
 
-  sed -i -e "s/ROBOSHOP_USER_PASSWORD/${roboshop_app_password}/" /etc/systemd/system/${component}.services &>>{log_file}
+   sed -i -e "s/ROBOSHOP_USER_PASSWORD/${roboshop_app_password}/" /etc/systemd/system/${component}.service &>>${log_file}
 
-  print_head " Reload SystemD"
-  systemctl daemon-reload &>>${log_file}
-    status_check $?
+   print_head "Reload SystemD"
+   systemctl daemon-reload &>>${log_file}
+   status_check $?
 
-    print_head " enable SystemD"
-  systemctl enable ${component} &>>{log_file
-    status_check $?
+   print_head "Enable ${component} Service "
+   systemctl enable ${component} &>>${log_file}
+   status_check $?
 
-    print_head "Restart SystemD"
-  systemctl restart ${component} &>>{log_file}
-  status_check $?
-
-}
+   print_head "Start ${component} Service"
+   systemctl restart ${component} &>>${log_file}
+   status_check $?
+ }
     schema_setup(){
       if [ "${schema_type}"=="mongo"]; then
 
