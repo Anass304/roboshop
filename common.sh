@@ -59,10 +59,10 @@ schema_setup() {
   fi
 }
     app_prereq_setup(){
-        print_head "Create Roboshop ${component}"
-            id roboshop &>>{log_ile}
+        print_head "Create Roboshop user"
+            id roboshop &>>{log_file}
             if [ $? -ne 0 ]; then
-              ${component}add roboshop &>>{log_file}
+              useradd roboshop &>>{log_file}
               fi
             status_check $?
 
