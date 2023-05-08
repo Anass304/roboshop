@@ -85,9 +85,11 @@ systemd_setup(){
             unzip /tmp/${component}.zip &>>{log_file}
              status_check $?
                   cd /app
+fi
+}
 
 
-    }
+
 
     nodejs(){
 
