@@ -72,7 +72,7 @@ systemd_setup(){
             status_check $?
 
             print_head "Create old content "
-            rm-rf /app/* &>>{log_file}
+            rm -rf /app/* &>>{log_file}
             status_check $?
 
             print_head "Downloading App content"
