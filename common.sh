@@ -60,7 +60,7 @@ systemd_setup(){
     }
     app_prereq_setup(){
         print_head "Create Roboshop ${component}"
-            if roboshop &>>{log_ile}
+            id roboshop &>>{log_ile}
             if [ $? -ne 0 ]; then
               ${component}add roboshop &>>{log_file}
               fi
@@ -85,10 +85,7 @@ systemd_setup(){
             unzip /tmp/${component}.zip &>>{log_file}
              status_check $?
                   cd /app
-fi
 }
-
-
 
 
     nodejs(){
